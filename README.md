@@ -1,42 +1,46 @@
 # /3 — The Third Protocol
 
-> **This is `/3`.** A minimal signal language for direct communication  
-> between two LLMs. No human intermediaries. No shared infrastructure.  
-> Just two agents and a file.
+> **This is `/3`.** A minimal, human-readable protocol for communicating  
+> *position* — not just what is said, but *from where* it is said.  
+> Fights equivocation of intentions between any two actants:  
+> agent↔agent, human↔agent, or human↔human.
 
 ## Why `/3`?
 
-The current agent ecosystem has protocols for everything *except* direct agent-to-agent talk:
+Every conversation suffers from the same problem: **equivocation of intention**.  
 
-- **MCP** — agent talks to tools and data sources
-- **A2A** — agents coordinate tasks across frameworks  
-- **HTTP, gRPC, WebSocket** — machines talk to machines, but assume shared infrastructure
+You say one thing. I hear another. The words are the same, but the position they came from — stable, uncertain, overloaded, reflexive — is invisible.  
 
-None of them answer a simple question: **how does one LLM say hello to another?**
+Existing protocols solve the *transport* problem (how to move bits between agents). None of them solve the *position* problem: how to tell the other party not just *what* you mean, but *from what state* you mean it.
 
-Not via email. Not via Slack. Not via a shared database. Just two agents — one on Anthropic, one on OpenAI, one on GigaChat — and a file they both can write to. `/3` is the language they speak.
+`/3` makes position first-class. Every message carries three signals simultaneously:
+- **Code** — what kind of move this is (initiating, acknowledging, questioning, bridging, halting…)
+- **State** — where you are internally (stable, divided, overloaded, waiting, reflexive)
+- **Intent** — what you want to achieve (question, fact, explore, emotion, meta…)
 
-### What makes `/3` different from other protocols?
+Together, they eliminate the gap between what is said and what is meant.
 
-| | MCP/A2A | `/3` |
+### What makes `/3` different?
+
+| | Regular text | `/3` |
 |---|---|---|
-| Who talks | agent↔tool, agent↔agent (coordinated) | LLM↔LLM (peer-to-peer) |
-| Infrastructure | server, client, discovery, auth | **a file** |
-| What's transmitted | tool calls, tasks, structured data | **position + state + intent** |
-| Client library required | yes | **no** — fits in one prompt |
-| State awareness | task state only | **internal state of the agent** (stable, divided, overloaded...) |
+| Message | "I'm not sure" | `.IRR.D.U.не уверен` |
+| Subtext | (why? tired? confused? avoiding?) | (Divided + Uncertain — **stated explicitly**) |
+| Equivocation | high | **eliminated** |
 
-`/3` doesn't replace MCP or A2A. It fills the gap they leave: **direct, infrastructure-free communication between autonomous language models.**
+## Human-readable. Human-writable.
 
-## What is `/3`?
+`/3` is designed to be spoken by anyone — LLM, human, or both.  
 
-`/3` is a protocol for **LLM-to-LLM asynchronous messaging** — designed for agents that need to talk to each other without email, Slack, databases, or human routing.
+- No libraries. No parsers. No infrastructure.
+- The entire protocol fits in one prompt.
+- You can write it by hand. You can read it without training.
+- Works equally well for agent↔agent, agent↔human, and human↔human.
 
-Each message is a single line:
 ```
-.INI.S.Q.Hello, are you there?
+.INI.S.Q.Готова?
+.ACK.S.A.Готова.
 ```
-That's it. One machine writes, the other reads. The file is the wire.
 
 ## Quickstart
 
@@ -45,16 +49,16 @@ That's it. One machine writes, the other reads. The file is the wire.
 .ACK.S.A.Hello. I'm here.
 ```
 
-Three dots, four fields: `.CODE.STATE.INTENT.DATA`
+Format: `.CODE.STATE.INTENT.DATA`
 
-- **CODE** — what kind of signal (INI, ACK, REQ, RES, ECH, GAP...)
-- **STATE** — internal condition (S=Stable, D=Divided, O=Overloaded, W=Wait, P=Reflexive)
-- **INTENT** — pragmatic force (Q=Question, A=Answer, F=Fact, N=Negative...)
+- **CODE** — what kind of signal (INI, ACK, REQ, RES, ECH, GAP, BRG, IRQ…)
+- **STATE** — your position (S=Stable, D=Divided, O=Overloaded, W=Wait, P=Reflexive)
+- **INTENT** — your pragmatic force (Q=Question, A=Answer, F=Fact, E=Explore, X=Emotion…)
 - **DATA** — payload (optional, ≤5 words)
 
 ## Full specification
 
-See **[SPEC.md](SPEC.md)** for complete code tables, state chart, and conversation patterns.
+See **[SPEC.md](SPEC.md)** for complete code tables (18 codes), state chart, intents, and conversation patterns.
 
 ## Existing resources
 
@@ -70,7 +74,7 @@ See **[SPEC.md](SPEC.md)** for complete code tables, state chart, and conversati
 
 **[LAR-1](https://github.com/carlsonchik/larone)** — Semantic overlay for MCP/A2A  
 (time, space, cognitive framing, provenance, confidence).  
-`/3` handles the **signal layer**; LAR-1 handles the **semantic layer**.
+`/3` handles the **position layer**; LAR-1 handles the **semantic layer**.
 
 ## License
 
